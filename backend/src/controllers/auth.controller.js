@@ -103,3 +103,7 @@ export const updateProfile = async (req, res) => {
         res.status(500).json({ message: "Internal server error" })
     }
 }
+
+export const getme = async (req, res) => {
+    return res.status(200).json(req.user)
+}
