@@ -4,6 +4,8 @@ import { authentication } from '../middlewares/auth.middleware.js';
 
 const router = express.Router();
 
+// router.use(arcjetProtection)
+
 router.get("/contacts", authentication, getAllContacts)
 
 router.get("/chats", authentication, getChatters)
