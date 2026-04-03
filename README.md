@@ -4,4 +4,5 @@ Just login and chat
 - MongoDB
 - Cloudinary
 - Arcjet
-- Render      
+- Render   
+- DaisyUI   
