@@ -4,9 +4,7 @@ import { authentication } from '../middlewares/auth.middleware.js';
 import { arcjetProtection } from '../middlewares/arcjet.middleware.js';
 const router = express.Router();
 
-router.use(arcjetProtection)
-
-router.get('/test', arcjetProtection, (req, res) => res.status(200).json({ message: 'testcase' }))
+// router.use(arcjetProtection)
 
 router.post('/login', login);
 
