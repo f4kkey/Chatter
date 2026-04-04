@@ -6,11 +6,10 @@ import bcrypt from "bcryptjs";
 export const register = async (req, res) => {
     const { fullName, email, password } = req.body;
     try {
-        // console.log(fullName, email, password)
+        console.log(fullName, email, password)
         if (!fullName || !email || !password) {
             return res.status(400).json({ message: "Please provide all required fields" });
         }
-
         const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
         if (!emailRegex.test(email)) {
             return res.status(400).json({ message: "Please provide a valid email address" });
