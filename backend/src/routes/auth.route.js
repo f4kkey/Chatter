@@ -12,7 +12,7 @@ router.post('/register', register);
 
 router.post('/logout', logout);
 
-router.post('/updateProfile', authentication, updateProfile);
+router.put('/updateProfile', authentication, updateProfile);
 
 router.get("/getme", authentication, getme)
 

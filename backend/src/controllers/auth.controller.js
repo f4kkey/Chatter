@@ -99,7 +99,7 @@ export const updateProfile = async (req, res) => {
         )
         res.status(200).json(updatedUser)
     } catch (err) {
-        console.log("Error in logout controller:", err)
+        console.log("Error in update profile controller:", err)
         res.status(500).json({ message: "Internal server error" })
     }
 }

@@ -1,5 +1,7 @@
 import express from 'express';
 import dotenv from 'dotenv';
+dotenv.config();
+
 import path from 'path';
 import morgan from 'morgan'
 import cookieParser from 'cookie-parser'
@@ -8,11 +10,12 @@ import { connectDB } from './lib/db.js'
 
 import authRoutes from './routes/auth.route.js';
 import messageRoutes from './routes/message.route.js';
+import { app, server } from './lib/socket.js';
 
-dotenv.config();
+
 const __dirname = path.resolve();
 const PORT = process.env.PORT || 3000;
-const app = express();
+
 app.use(express.json({ limit: "5MB" }))
 app.use(morgan("dev"))
 app.use(cors({ origin: process.env.CLIENT_URL, credentials: true }));
@@ -29,7 +32,7 @@ if (process.env.NODE_ENV === "production") {
     })
 }
 
-app.listen(PORT, () => {
+server.listen(PORT, () => {
     console.log('Server is running on port ' + PORT);
     connectDB();
 });

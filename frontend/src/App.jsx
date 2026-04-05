@@ -4,7 +4,7 @@ import ChatPage from './pages/ChatPage'
 import LoginPage from './pages/LoginPage'
 import RegisterPage from './pages/RegisterPage'
 import { useAuthStore } from './store/useAuthStore'
-import PageLoader from './components/PageLoader'
+import PageLoader from './components/loader/PageLoader'
 import { Toaster } from 'react-hot-toast'
 
 function App() {
