@@ -4,11 +4,12 @@ import { axiosInstance } from "../lib/axios"
 import toast from "react-hot-toast"
 import { data } from "react-router"
 
-export const useAuthStore = create((set) => ({
+export const useAuthStore = create((set, get) => ({
     authUser: null,
     isCheckingAuth: true,
     isRegistering: false,
     isLoggingIn: false,
+    socket: null,
 
     checkAuth: async () => {
         try {
@@ -72,5 +73,11 @@ export const useAuthStore = create((set) => ({
         } catch (error) {
             toast.error(error.response.data.message)
         }
-    }
+    },
+
+    connectSocket: () => {
+        const { authUser } = get()
+        if (!authUser || get().socket?.connected) return
+
+    },
 })) 
