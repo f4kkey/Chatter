@@ -15,19 +15,28 @@ const socketSV = new Server(server, {
 
 socketSV.use(socketAuthMiddleware)
 
-const userSocketMap = {};
+const userSocketMap = new Map();
 
 socketSV.on('connection', (socket) => {
     console.log("A user connected: ", socket.user.fullName)
     const userID = socket.userID
-    userSocketMap[userID] = socket.id
+    const sockets = userSocketMap.get(userID) ?? new Set()
+    sockets.add(socket.id)
+    userSocketMap.set(userID, sockets)
 
-    socketSV.emit('toOnlineUsers', Object.keys(userSocketMap))
+    socketSV.emit('toOnlineUsers', [...userSocketMap.keys()])
 
     socket.on('disconnect', () => {
-        console.log("A user disconnected: ", socket.user.fullName)
-        delete userSocketMap[userID]
-        socketSV.emit('toOnlineUsers', Object.keys(userSocketMap))
+
+        const sockets = userSocketMap.get(userID)
+        if (sockets) {
+            sockets.delete(socket.id)
+            if (sockets.size === 0) {
+                console.log("A user disconnected: ", socket.user.fullName)
+                userSocketMap.delete(userID)
+            }
+        }
+        socketSV.emit('toOnlineUsers', [...userSocketMap.keys()])
     })
 })
 
