@@ -4,6 +4,7 @@ import { useAuthStore } from '../../store/useAuthStore'
 import ChatHeader from './ChatHeader'
 import NoChatHistoryPlaceholder from './NoChatHistoryPlaceholder'
 import MessagesLoader from '../loader/MessageLoader'
+import MessageInput from './MessageInput'
 
 function ChatContainer() {
     const { selectedUser, isMessagesLoading, messages, getMessages } = useChatStore()
@@ -33,7 +34,7 @@ function ChatContainer() {
                                         )}
                                         {msg.text && (<p className='mt-2'>{msg.text}</p>)}
                                         <p className='text-xs mt-1 opacity-75 flex items-center gap-1'>
-                                            {new Date(msg.createdAt).toISOString().slice(11, 16)}
+                                            {new Date(msg.createdAt).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
                                         </p>
                                     </div>
                                 </div>
@@ -44,7 +45,7 @@ function ChatContainer() {
                             < NoChatHistoryPlaceholder name={selectedUser.fullName} />
                         )}
             </div>
-            {/* <MessageInput /> */}
+            <MessageInput />
         </>
     )
 }

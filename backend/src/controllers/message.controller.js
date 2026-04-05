@@ -22,7 +22,7 @@ export const getMessages = async (req, res) => {
                 { senderID: currentUser._id, receiverID: userToChatID },
                 { senderID: userToChatID, receiverID: currentUser._id },
             ]
-        })
+        }).sort({ createdAt: 1 })
         res.status(200).json(message);
     } catch (error) {
         console.log("Error in get messages controller:", error)
@@ -41,7 +41,7 @@ export const sendMessage = async (req, res) => {
             return res.status(400).json({ message: "Required text or message" })
         }
 
-        if (receiverID.equals(senderID)) {
+        if (receiverID.toString() === senderID.toString()) {
             return res.status(400).json({ message: "Can't send message to yourself" })
         }
 
