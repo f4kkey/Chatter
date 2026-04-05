@@ -23,7 +23,6 @@ export const socketAuthMiddleware = async (socket, next) => {
         }
         socket.user = user;
         socket.userID = user._id.toString()
-        console.log(`socket ${user.fullName}`)
         next()
 
     } catch (error) {
