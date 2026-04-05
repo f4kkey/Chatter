@@ -1,21 +1,19 @@
 import React, { useEffect } from 'react'
-import { useChatStore } from '../store/useChatStore'
-import UserLoadingSkeleton from './loader/UserLoader'
-import NoChatsFound from './NoChatFound'
+import { useChatStore } from '../../store/useChatStore'
+import UserLoadingSkeleton from '../loader/UserLoader'
 
-function ChatList() {
-    const { getChatters, chatters, isUsersLoading, setSelectedUser } = useChatStore()
+function ContactList() {
+    const { getAllContacts, setSelectedUser, isUsersLoading, allContacts } = useChatStore()
     useEffect(() => {
-        getChatters()
-    }, [getChatters])
+        getAllContacts()
+    }, [getAllContacts])
 
     if (isUsersLoading) return <UserLoadingSkeleton />
-    if (chatters.length === 0) return <NoChatsFound />
 
     return (
         <div>
             {
-                chatters.map(chat => (
+                allContacts.map(chat => (
                     <div key={chat._id}
                         className='bg-cyan-500/10 p-4 rounded-lg cursor-pointer hover:bg-cyan-500/20 transition-colors'
                         onClick={() => setSelectedUser(chat)}
@@ -35,4 +33,4 @@ function ChatList() {
     )
 }
 
-export default ChatList
+export default ContactList

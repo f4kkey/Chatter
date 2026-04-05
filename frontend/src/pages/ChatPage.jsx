@@ -5,8 +5,8 @@ import ProfileHeader from '../components/ProfileHeader'
 import TabSwitch from '../components/TabSwitch'
 import ChatContainer from '../components/ChatContainer'
 import ChatPlaceholder from '../components/ChatPlaceholder'
-import ChatList from '../components/ChatList'
-import ContactList from '../components/ContactList'
+import ChatList from '../components/list/ChatList'
+import ContactList from '../components/list/ContactList'
 
 function ChatPage() {
     const { tab, selectedUser } = useChatStore()
