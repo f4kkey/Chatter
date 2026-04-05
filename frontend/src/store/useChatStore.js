@@ -77,4 +77,22 @@ export const useChatStore = create((set, get) => ({
             toast.error(error.response.data.message)
         }
     },
+
+    receiveMessages: () => {
+        const { selectedUser } = get();
+        if (!selectedUser) return;
+
+        const { socket } = useAuthStore.getState()
+
+        socket.on("newMessage", (newMessage) => {
+            if (!(newMessage.senderID === selectedUser._id)) return
+            const currentMessages = get().messages
+            set({ messages: [...currentMessages, newMessage] })
+        })
+    },
+
+    unreceiveMessages: () => {
+        const { socket } = useAuthStore.getState()
+        socket.off("newMessage")
+    },
 }))

@@ -17,8 +17,12 @@ socketSV.use(socketAuthMiddleware)
 
 const userSocketMap = new Map();
 
+export const getReceiverSocketID = (userID) => {
+    return userSocketMap.get(userID)
+}
+
 socketSV.on('connection', (socket) => {
-    console.log("A user connected: ", socket.user.fullName)
+    console.log("A user connected: ", socket.user.fullName, socket.userID)
     const userID = socket.userID
     const sockets = userSocketMap.get(userID) ?? new Set()
     sockets.add(socket.id)
