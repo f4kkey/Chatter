@@ -1,5 +1,5 @@
 import React from 'react'
-function UserLoadingSkeleton() {
+function UserLoader() {
     return (
         <div className="space-y-2">
             {[1, 2, 3].map((item) => (
@@ -16,4 +16,4 @@ function UserLoadingSkeleton() {
         </div>
     );
 }
-export default UserLoadingSkeleton;
+export default UserLoader;

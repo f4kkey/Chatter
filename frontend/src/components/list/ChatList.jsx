@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react'
 import { useChatStore } from '../../store/useChatStore'
-import UserLoadingSkeleton from '../loader/UserLoader'
+import UserLoader from '../loader/UserLoader'
 import NoChatsFound from '../NoChatFound'
 
 function ChatList() {
@@ -9,7 +9,7 @@ function ChatList() {
         getChatters()
     }, [getChatters])
 
-    if (isUsersLoading) return <UserLoadingSkeleton />
+    if (isUsersLoading) return <UserLoader />
     if (chatters.length === 0) return <NoChatsFound />
 
     return (

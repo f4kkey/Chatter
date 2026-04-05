@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react'
 import { useChatStore } from '../../store/useChatStore'
-import UserLoadingSkeleton from '../loader/UserLoader'
+import UserLoader from '../loader/UserLoader'
 
 function ContactList() {
     const { getAllContacts, setSelectedUser, isUsersLoading, allContacts } = useChatStore()
@@ -8,7 +8,7 @@ function ContactList() {
         getAllContacts()
     }, [getAllContacts])
 
-    if (isUsersLoading) return <UserLoadingSkeleton />
+    if (isUsersLoading) return <UserLoader />
 
     return (
         <>
