@@ -13,7 +13,7 @@ function ChatList() {
     if (chatters.length === 0) return <NoChatsFound />
 
     return (
-        <div>
+        <>
             {
                 chatters.map(chat => (
                     <div key={chat._id}
@@ -31,7 +31,7 @@ function ChatList() {
                     </div>
                 ))
             }
-        </div>
+        </>
     )
 }
 

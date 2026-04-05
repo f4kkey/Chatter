@@ -11,7 +11,7 @@ function ContactList() {
     if (isUsersLoading) return <UserLoadingSkeleton />
 
     return (
-        <div>
+        <>
             {
                 allContacts.map(chat => (
                     <div key={chat._id}
@@ -29,7 +29,7 @@ function ContactList() {
                     </div>
                 ))
             }
-        </div>
+        </>
     )
 }
 

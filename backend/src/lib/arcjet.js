@@ -6,7 +6,7 @@ const aj = arcjet({
     key: process.env.ARCJET_KEY,
     rules: [
         // Shield protects your app from common attacks e.g. SQL injection
-        shield({ mode: "LIVE" }),
+        shield({ mode: "DRY_RUN" }),
         // Create a bot detection rule
         detectBot({
             mode: "LIVE", // Blocks requests. Use "DRY_RUN" to log only
