@@ -24,6 +24,12 @@ export const getMessages = async (req, res) => {
                 { senderID: userToChatID, receiverID: currentUser._id },
             ]
         }).sort({ createdAt: 1 })
+
+        await Message.updateMany(
+            { senderID: userToChatID, receiverID: currentUser._id, isRead: false },
+            { $set: { isRead: true } }
+        );
+
         res.status(200).json(message);
     } catch (error) {
         console.log("Error in get messages controller:", error)
@@ -109,5 +115,19 @@ export const getChatters = async (req, res) => {
     } catch (error) {
         console.log("Error in get chatters controller:", error)
         res.status(500).json({ message: "Internal server error" })
+    }
+}
+
+export const getUnreadUsers = async (req, res) => {
+    try {
+        const currentUser = req.user;
+        const unreadSenderIDs = await Message.distinct("senderID", { 
+            receiverID: currentUser._id, 
+            isRead: false 
+        });
+        res.status(200).json(unreadSenderIDs);
+    } catch (error) {
+        console.log("Error in get unread users controller:", error);
+        res.status(500).json({ message: "Internal server error" });
     }
 }

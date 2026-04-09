@@ -7,15 +7,13 @@ import MessagesLoader from '../loader/MessageLoader'
 import MessageInput from './MessageInput'
 
 function ChatContainer() {
-    const { selectedUser, isMessagesLoading, messages, getMessages, receiveMessages, unreceiveMessages } = useChatStore()
+    const { selectedUser, isMessagesLoading, messages, getMessages } = useChatStore()
     const { authUser } = useAuthStore()
     const messageEndRef = useRef(null)
 
     useEffect(() => {
         getMessages(selectedUser._id)
-        receiveMessages()
-        return () => unreceiveMessages()
-    }, [getMessages, selectedUser, receiveMessages, unreceiveMessages])
+    }, [getMessages, selectedUser])
 
     useEffect(() => {
         if (messageEndRef.current) {
