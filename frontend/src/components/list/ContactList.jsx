@@ -4,7 +4,7 @@ import UserLoader from '../loader/UserLoader'
 import { useAuthStore } from '../../store/useAuthStore'
 
 function ContactList() {
-    const { getAllContacts, setSelectedUser, isUsersLoading, allContacts, selectedUser } = useChatStore()
+    const { getAllContacts, setSelectedUser, isUsersLoading, allContacts, selectedUser, unreadUsers } = useChatStore()
     const { onlineUsers } = useAuthStore()
     useEffect(() => {
         getAllContacts()
@@ -17,7 +17,7 @@ function ContactList() {
             {
                 allContacts.map(chat => (
                     <div key={chat._id}
-                        className={`bg-cyan-500/10 p-4 rounded-lg cursor-pointer hover:bg-cyan-500/20 transition-colors
+                        className={`bg-cyan-500/10 p-4 rounded-lg cursor-pointer hover:bg-cyan-500/20 transition-colors relative
                         ${selectedUser?._id === chat._id ? "bg-cyan-500/50" : ""} `}
                         onClick={() => setSelectedUser(chat)}
                     >
@@ -27,7 +27,10 @@ function ContactList() {
                                     <img src={chat.profilePicture || '/avatar.png'} alt="chat.fullName" />
                                 </div>
                             </div>
-                            <p className='text-slate-200 font-medium truncate'>{chat.fullName}</p>
+                            <p className='text-slate-200 font-medium truncate flex-1'>{chat.fullName}</p>
+                            {unreadUsers?.includes(chat._id) && (
+                                <div className='w-3 h-3 bg-red-500 rounded-full animate-bounce shadow-[0_0_8px_rgba(239,68,68,0.8)]'></div>
+                            )}
                         </div>
                     </div>
                 ))

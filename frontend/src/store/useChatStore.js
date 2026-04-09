@@ -9,11 +9,20 @@ export const useChatStore = create((set, get) => ({
     messages: [],
     tab: "chats",
     selectedUser: null,
+    unreadUsers: [],
     isUsersLoading: false,
     isMessagesLoading: false,
 
     setTab: (tab) => set({ tab: tab }),
-    setSelectedUser: (user) => set({ selectedUser: user }),
+    setSelectedUser: (user) => {
+        set({ selectedUser: user });
+        if (user) {
+            const currentUnreads = get().unreadUsers;
+            if (currentUnreads.includes(user._id)) {
+                set({ unreadUsers: currentUnreads.filter(id => id !== user._id) });
+            }
+        }
+    },
 
     getAllContacts: async () => {
         set({ isUsersLoading: true })
@@ -45,9 +54,18 @@ export const useChatStore = create((set, get) => ({
             const res = await axiosInstance.get(`/messages/${userId}`)
             set({ messages: res.data })
         } catch (error) {
-            toast.error(error.response.data.message)
+            toast.error(error.response?.data?.message || error.message)
         } finally {
             set({ isMessagesLoading: false })
+        }
+    },
+
+    getUnreadUsers: async () => {
+        try {
+            const res = await axiosInstance.get("/messages/unread");
+            set({ unreadUsers: res.data });
+        } catch (error) {
+            console.error("Failed to fetch unread messages", error);
         }
     },
 
@@ -78,21 +96,27 @@ export const useChatStore = create((set, get) => ({
         }
     },
 
-    receiveMessages: () => {
-        const { selectedUser } = get();
-        if (!selectedUser) return;
+    subscribeToMessages: () => {
+        const { socket } = useAuthStore.getState();
+        if (!socket) return;
 
-        const { socket } = useAuthStore.getState()
+        socket.off("newMessage");
 
         socket.on("newMessage", (newMessage) => {
-            if (!(newMessage.senderID === selectedUser._id)) return
-            const currentMessages = get().messages
-            set({ messages: [...currentMessages, newMessage] })
-        })
+            const { selectedUser, messages, unreadUsers } = get();
+
+            if (selectedUser?._id === newMessage.senderID) {
+                set({ messages: [...messages, newMessage] });
+            } else {
+                if (!unreadUsers.includes(newMessage.senderID)) {
+                    set({ unreadUsers: [...unreadUsers, newMessage.senderID] });
+                }
+            }
+        });
     },
 
-    unreceiveMessages: () => {
-        const { socket } = useAuthStore.getState()
-        socket.off("newMessage")
+    unsubscribeFromMessages: () => {
+        const { socket } = useAuthStore.getState();
+        if (socket) socket.off("newMessage");
     },
 }))

@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import { useChatStore } from '../store/useChatStore'
 import BorderAnimateContainer from '../components/BorderAnimateContainer'
 import ProfileHeader from '../components/ProfileHeader'
@@ -9,7 +9,14 @@ import ChatList from '../components/list/ChatList'
 import ContactList from '../components/list/ContactList'
 
 function ChatPage() {
-    const { tab, selectedUser } = useChatStore()
+    const { tab, selectedUser, getUnreadUsers, subscribeToMessages, unsubscribeFromMessages } = useChatStore()
+    
+    useEffect(() => {
+        getUnreadUsers()
+        subscribeToMessages()
+        return () => unsubscribeFromMessages()
+    }, [getUnreadUsers, subscribeToMessages, unsubscribeFromMessages])
+
     return (
         <div className='relative w-full max-w-6xl h-[700px]'>
             <BorderAnimateContainer>
