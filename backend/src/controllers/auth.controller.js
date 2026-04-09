@@ -1,5 +1,6 @@
 import cloudinary from "../lib/cloudinary.js";
-import { generateToken } from "../lib/util.js";
+import { generateAccessToken, generateRefreshToken } from "../lib/util.js";
+import jwt from "jsonwebtoken";
 import User from "../models/User.js";
 import bcrypt from "bcryptjs";
 
@@ -29,8 +30,8 @@ export const register = async (req, res) => {
 
         if (newUser) {
             await newUser.save();
-            generateToken(newUser._id, res)
-
+            generateAccessToken(newUser._id, res)
+            generateRefreshToken(newUser._id, res)
 
             res.status(201).json({
                 _id: newUser._id,
@@ -61,7 +62,8 @@ export const login = async (req, res) => {
         const isPasswordRight = await bcrypt.compare(password, user.password);
         if (!isPasswordRight) return res.status(400).json({ message: "Invalid credentials" });
 
-        generateToken(user._id, res)
+        generateAccessToken(user._id, res)
+        generateRefreshToken(user._id, res)
         res.status(201).json({
             _id: user._id,
             email: user.email,
@@ -77,7 +79,8 @@ export const login = async (req, res) => {
 
 export const logout = async (req, res) => {
     try {
-        res.cookie("jwt", "", { maxAge: 0 })
+        res.cookie("accessToken", "", { maxAge: 0 })
+        res.cookie("refreshToken", "", { maxAge: 0 })
         res.status(200).json({ message: "Log out succeed" })
     } catch (err) {
         console.log("Error in logout controller:", err)
@@ -107,3 +110,29 @@ export const updateProfile = async (req, res) => {
 export const getme = async (req, res) => {
     return res.status(200).json(req.user)
 }
+
+export const refreshToken = async (req, res) => {
+    try {
+        const refreshToken = req.cookies.refreshToken;
+        if (!refreshToken) {
+            return res.status(401).json({ message: "No refresh token provided" });
+        }
+
+        const decoded = jwt.verify(refreshToken, process.env.REFRESH_TOKEN_SECRET);
+        if (!decoded) {
+            return res.status(401).json({ message: "Invalid refresh token" });
+        }
+
+        const user = await User.findById(decoded.userID);
+        if (!user) {
+            return res.status(401).json({ message: "User not found" });
+        }
+
+
+        generateAccessToken(user._id, res)
+        res.status(200).json({ message: "Access token refreshed" });
+    } catch (err) {
+        console.log("Error in refresh token controller:", err);
+        return res.status(401).json({ message: "Invalid refresh token" });
+    }
+};

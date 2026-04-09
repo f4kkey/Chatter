@@ -3,11 +3,11 @@ import User from "../models/User.js"
 
 export const authentication = async (req, res, next) => {
     try {
-        const token = req.cookies.jwt
+        const token = req.cookies.accessToken
         // console.log(token)
         if (!token) return res.status(401).json({ message: "No token provided" })
 
-        const decoded = jwt.verify(token, process.env.JWT_SECRET)
+        const decoded = jwt.verify(token, process.env.ACCESS_TOKEN_SECRET)
         if (!decoded) return res.status(401).json({ message: "Invalid token" })
         // console.log(decoded)
         const user = await User.findById(decoded.userID).select("-password")

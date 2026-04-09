@@ -1,5 +1,5 @@
 import express from 'express';
-import { getme, login, logout, register, updateProfile } from '../controllers/auth.controller.js';
+import { getme, login, logout, register, updateProfile, refreshToken } from '../controllers/auth.controller.js';
 import { authentication } from '../middlewares/auth.middleware.js';
 import { arcjetProtection } from '../middlewares/arcjet.middleware.js';
 const router = express.Router();
@@ -11,6 +11,8 @@ router.post('/login', login);
 router.post('/register', register);
 
 router.post('/logout', logout);
+
+router.post('/refresh', refreshToken);
 
 router.put('/updateProfile', authentication, updateProfile);
 
