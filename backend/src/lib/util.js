@@ -6,7 +6,7 @@ export const generateAccessToken = (userID, res) => {
     })
     console.log(accessToken)
     res.cookie("accessToken", accessToken, {
-        maxAge: 5 * 60 * 1000,
+        maxAge: 30 * 60 * 1000,
         httpOnly: true,
         sameSite: "strict",
         secure: process.env.NODE_ENV !== "development",

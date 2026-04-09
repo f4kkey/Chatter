@@ -5,7 +5,7 @@ import NoChatsFound from '../NoChatFound'
 import { useAuthStore } from '../../store/useAuthStore'
 
 function ChatList() {
-    const { getChatters, chatters, isUsersLoading, setSelectedUser } = useChatStore()
+    const { getChatters, chatters, isUsersLoading, setSelectedUser, selectedUser } = useChatStore()
     const { onlineUsers } = useAuthStore()
     useEffect(() => {
         getChatters()
@@ -19,7 +19,8 @@ function ChatList() {
             {
                 chatters.map(chat => (
                     <div key={chat._id}
-                        className='bg-cyan-500/10 p-4 rounded-lg cursor-pointer hover:bg-cyan-500/20 transition-colors'
+                        className={`bg-cyan-500/10 p-4 rounded-lg cursor-pointer hover:bg-cyan-500/20 transition-colors
+                        ${selectedUser?._id === chat._id ? "bg-cyan-500/50" : ""} `}
                         onClick={() => setSelectedUser(chat)}
                     >
 

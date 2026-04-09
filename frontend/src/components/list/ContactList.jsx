@@ -4,7 +4,7 @@ import UserLoader from '../loader/UserLoader'
 import { useAuthStore } from '../../store/useAuthStore'
 
 function ContactList() {
-    const { getAllContacts, setSelectedUser, isUsersLoading, allContacts } = useChatStore()
+    const { getAllContacts, setSelectedUser, isUsersLoading, allContacts, selectedUser } = useChatStore()
     const { onlineUsers } = useAuthStore()
     useEffect(() => {
         getAllContacts()
@@ -17,7 +17,8 @@ function ContactList() {
             {
                 allContacts.map(chat => (
                     <div key={chat._id}
-                        className='bg-cyan-500/10 p-4 rounded-lg cursor-pointer hover:bg-cyan-500/20 transition-colors'
+                        className={`bg-cyan-500/10 p-4 rounded-lg cursor-pointer hover:bg-cyan-500/20 transition-colors
+                        ${selectedUser?._id === chat._id ? "bg-cyan-500/50" : ""} `}
                         onClick={() => setSelectedUser(chat)}
                     >
                         <div className='flex items-center gap-3'>
